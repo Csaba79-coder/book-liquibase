@@ -1,0 +1,6 @@
+package com.csaba79coder.bookliquibase.domain.book.value;
+
+public enum Genre {
+    NOVEL, MYSTERY, THRILLER, HORROR, HISTORICAL, ROMANCE, WESTERN, BILDUNGSROMAN,
+    SCIENCE_FICTION, FICTION, FANTASY, MAGICAL_REALISM, REALIST_LITERATURE, OTHER
+}
