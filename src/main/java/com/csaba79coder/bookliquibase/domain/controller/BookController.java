@@ -17,11 +17,20 @@ import java.util.List;
 public class BookController {
 
     private final BookService bookService;
+
     @RequestMapping(
             value = "/books",
             method = RequestMethod.GET,
             headers = "Accept=application/json")
     public ResponseEntity<List<Book>> renderAllBooks() {
         return ResponseEntity.status(200).body(bookService.renderAllBooks());
+    }
+
+    @RequestMapping(
+            value = "/books",
+            method = RequestMethod.POST,
+            headers = "Accept=application/json")
+    public ResponseEntity<Book> addNewBook(Book book) {
+        return ResponseEntity.status(201).body(bookService.saveBook(book));
     }
 }
