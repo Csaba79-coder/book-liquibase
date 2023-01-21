@@ -28,3 +28,11 @@ How to compare recursively ignoring given fields using assertJ?
 
 https://stackoverflow.com/questions/43316133/how-to-compare-recursively-ignoring-given-fields-using-assertj
 
+
+Checking response:
+
+then(response)
+    .usingRecursiveComparison()
+    .ignoringExpectedNullFields()
+    .ignoringFields("id")
+    .isEqualTo(testBook);
