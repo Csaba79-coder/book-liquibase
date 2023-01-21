@@ -46,6 +46,7 @@ public class Book {
     private Status status = Status.AVAILABLE;
 
     @Column(name = "availability", nullable = false)
+    @Enumerated(EnumType.STRING)
     private Availability availability = Availability.AVAILABLE;
 
     public void delete(Book book) {
