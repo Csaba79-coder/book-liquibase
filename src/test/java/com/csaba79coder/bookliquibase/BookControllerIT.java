@@ -24,10 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc(addFilters = false)
 public class BookControllerIT extends BookLiquibaseApplicationTests {
 
-    // https://howtodoinjava.com/spring-boot2/testing/spring-boot-mockmvc-example/
-    // https://spring.io/guides/gs/testing-web/
-    // https://www.youtube.com/watch?v=tG-TwkIhjOk
-    // endpoint testing & integration testing
+
 
     @Autowired
     private MockMvc mockMvc;
