@@ -1,6 +1,5 @@
 package com.csaba79coder.bookliquibase.domain.book.entity;
 
-
 import com.csaba79coder.bookliquibase.domain.book.value.Availability;
 import com.csaba79coder.bookliquibase.domain.book.value.Genre;
 import com.csaba79coder.bookliquibase.domain.book.value.Status;
