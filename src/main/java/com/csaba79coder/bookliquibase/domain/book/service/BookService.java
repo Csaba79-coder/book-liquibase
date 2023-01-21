@@ -23,7 +23,8 @@ public class BookService {
 
     private final BookRepository bookRepository;
 
-    public List<Book> renderAllBooks() {
+    public List<Book>
+    renderAllBooks() {
         return bookRepository.findAll();
     }
 
