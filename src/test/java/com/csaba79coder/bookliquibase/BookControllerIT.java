@@ -81,6 +81,17 @@ public class BookControllerIT extends BookLiquibaseApplicationTests {
                 .isEqualTo(1);
     }
 
+    @Test
+    @DisplayName("testRenderAllBooksWithDeletedAvailabilityInDB")
+    void testRenderAllBooksWithDeletedAvailabilityInDb(){
+        // Given
+
+
+        // When
+
+        // Then
+    }
+
     private Book createDummyBookForTest() {
         Book dummyBook = new Book();
         dummyBook.setId(UUID.fromString("570c5ac2-1f1a-46c4-9215-ccd17e9858f4"));

@@ -13,7 +13,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import org.hibernate.annotations.Where;
 
 import java.util.UUID;
@@ -21,7 +20,6 @@ import java.util.UUID;
 @Entity
 @Getter
 @Setter
-@ToString
 @Table(name = "book")
 @Where(clause = "availability != 'DELETED'")
 public class Book {
