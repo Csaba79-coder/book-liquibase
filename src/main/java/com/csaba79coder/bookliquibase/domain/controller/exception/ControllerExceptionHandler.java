@@ -28,7 +28,5 @@ public class ControllerExceptionHandler {
 
     private String responseBodyWithMessage(ErrorCode code, String message) {
         return Map.of(code, message).toString();
-       // return new HashMap<>() {{   put("sfsfs", "fsfsf");       }};
-        //return code + " : " + message;
     }
 }
