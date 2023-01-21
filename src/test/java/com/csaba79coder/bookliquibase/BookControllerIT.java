@@ -136,7 +136,7 @@ public class BookControllerIT extends BookLiquibaseApplicationTests {
         deletedBook.setAvailability(Availability.DELETED);
 
         // When
-        ResultActions response = mockMvc.perform(MockMvcRequestBuilders.delete("/books/{bookId}", String.valueOf(testBook.getId()))
+        ResultActions response = mockMvc.perform(MockMvcRequestBuilders.delete("/books/{bookId}", testBook.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(testBook))
                         .accept(MediaType.APPLICATION_JSON))
@@ -146,6 +146,9 @@ public class BookControllerIT extends BookLiquibaseApplicationTests {
         then(response)
                .usingRecursiveComparison()
                .isEqualTo(deletedBook);
+        then(bookRepository.findAll().size())
+                .usingRecursiveComparison()
+                .isEqualTo(0);
     }
 
     private Book createAndSaveDummyBookForTest() {

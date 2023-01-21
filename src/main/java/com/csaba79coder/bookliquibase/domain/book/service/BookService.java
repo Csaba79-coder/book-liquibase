@@ -47,6 +47,6 @@ public class BookService {
                             log.info(message);
                             return new NoSuchElementException(message);
                         });
-        bookRepository.delete(book);
+        book.delete(book);
     }
 }
