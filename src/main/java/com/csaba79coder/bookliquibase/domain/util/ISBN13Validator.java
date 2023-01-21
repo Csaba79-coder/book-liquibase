@@ -1,7 +1,5 @@
 package com.csaba79coder.bookliquibase.domain.util;
 
-import java.util.InputMismatchException;
-
 public class ISBN13Validator {
 
     public static boolean validISBN(Long isbnLong) {
