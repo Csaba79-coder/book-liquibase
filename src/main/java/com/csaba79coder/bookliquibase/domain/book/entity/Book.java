@@ -12,6 +12,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Where;
 
@@ -21,6 +22,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Table(name = "book")
+@NoArgsConstructor
 @Where(clause = "availability != 'DELETED'")
 public class Book {
 
@@ -29,14 +31,14 @@ public class Book {
     @Column(name = "id", nullable = false)
     private UUID id = UUID.randomUUID();
 
-    @Column(name = "title", nullable = false)
+    @Column(name = "title", nullable = false, unique = true)
     private String title;
 
     @Column(name = "genre", nullable = false)
     @Enumerated(EnumType.STRING)
     private Genre genre = Genre.OTHER;
 
-    @Column(name = "isbn", nullable = false)
+    @Column(name = "isbn", nullable = false, unique = true)
     private Long isbn;
 
     @Column(name = "status", nullable = false)
