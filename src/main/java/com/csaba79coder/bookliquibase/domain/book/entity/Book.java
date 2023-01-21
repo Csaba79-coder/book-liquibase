@@ -36,7 +36,6 @@ public class Book {
     @Enumerated(EnumType.STRING)
     private Genre genre = Genre.OTHER;
 
-    // TODO: isbn validator!
     @Column(name = "isbn", nullable = false)
     private Long isbn;
 
