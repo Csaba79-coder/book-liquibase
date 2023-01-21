@@ -7,6 +7,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.UUID;
+
+import static java.text.MessageFormat.format;
 
 @Service
 @RequiredArgsConstructor
@@ -21,5 +25,15 @@ public class BookService {
 
     public Book saveBook(Book book) {
         return bookRepository.save(book);
+    }
+
+    public void deleteBookById(UUID id) {
+        Book book = bookRepository.findBookById(id)
+                        .orElseThrow(() -> {
+                            String message = format("Book with id: %s was not found", id);
+                            log.info(message);
+                            return new NoSuchElementException(message);
+                        });
+        book.delete(book);
     }
 }

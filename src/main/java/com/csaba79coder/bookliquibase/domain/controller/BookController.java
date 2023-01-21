@@ -5,11 +5,13 @@ import com.csaba79coder.bookliquibase.domain.book.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @CrossOrigin(value = "http://localhost:8080")
@@ -32,5 +34,14 @@ public class BookController {
             headers = "Accept=application/json")
     public ResponseEntity<Book> addNewBook(Book book) {
         return ResponseEntity.status(201).body(bookService.saveBook(book));
+    }
+
+    @RequestMapping(
+            value = "/books/{bookId}",
+            method = RequestMethod.DELETE,
+            headers = "Accept=application/json")
+    public ResponseEntity<Object> deleteBook(UUID id, @PathVariable UUID bookId) {
+        bookService.deleteBookById(id);
+        return ResponseEntity.status(204).build();
     }
 }
