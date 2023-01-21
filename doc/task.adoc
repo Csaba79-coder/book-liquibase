@@ -19,7 +19,10 @@ https://stackoverflow.com/questions/21495296/spring-mvc-controller-test-print-th
 image::img/image-2023-01-21-11-53-42-324.png[]
 
 String content = result.getResponse().getContentAsString();
+
 String content = String.valueOf(response.andReturn().getResponse().toString());
+
+resultActions.andDo(MockMvcResultHandlers.print());
 
 How to compare recursively ignoring given fields using assertJ?
 
