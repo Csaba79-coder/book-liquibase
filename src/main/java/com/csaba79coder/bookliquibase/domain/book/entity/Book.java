@@ -40,6 +40,7 @@ public class Book {
     private Long isbn;
 
     @Column(name = "status", nullable = false)
+    @Enumerated(EnumType.STRING)
     private Status status = Status.AVAILABLE;
 
     @Column(name = "availability", nullable = false)
