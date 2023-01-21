@@ -39,4 +39,6 @@ then(response)
 
 https://www.javatpoint.com/java-string-format
 
+https://www.baeldung.com/java-string-formatting-named-placeholders
+
 https://github.com/assertj/assertj
