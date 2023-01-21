@@ -169,8 +169,7 @@ public class BookControllerIT extends BookLiquibaseApplicationTests {
 
         // Then
         then(body)
-                // .usingRecursiveComparison()
-                .isEqualTo("{ERROR_CODE_001=Book with id: %s was not found}");
+                .isEqualTo("{ERROR_CODE_001=Book with id: 4bc34bbf-6278-4586-9e62-429bc41edcf5 was not found}");
     }
 
     private Book createAndSaveDummyBookForTest() {
