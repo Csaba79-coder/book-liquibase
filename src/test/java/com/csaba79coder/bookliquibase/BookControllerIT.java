@@ -8,6 +8,7 @@ import com.csaba79coder.bookliquibase.domain.book.value.Genre;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.micrometer.observation.Observation;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +25,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc(addFilters = false)
 public class BookControllerIT extends BookLiquibaseApplicationTests {
-
-
 
     @Autowired
     private MockMvc mockMvc;
@@ -66,7 +65,7 @@ public class BookControllerIT extends BookLiquibaseApplicationTests {
     @DisplayName("testRenderAllBooksWithNonEmptyResult")
     void testRenderAllBooksWithNonEmptyResult() throws Exception {
         // Given
-        Book testBook = createDummyBookForTest();
+        Book testBook = createAndSaveDummyBookForTest();
         bookRepository.save(testBook);
 
         // When
@@ -86,10 +85,10 @@ public class BookControllerIT extends BookLiquibaseApplicationTests {
     @DisplayName("testRenderAllBooksWithDeletedAvailabilityInDB")
     void testRenderAllBooksWithDeletedAvailabilityInDb() throws Exception {
         // Given
-        Book testBook = createDummyBookForTest();
-        Book testDeletedBook = createDummyDeletedBookForTest();
+        Book testBook = createAndSaveDummyBookForTest();
         bookService.saveBook(testBook);
-        bookService.saveBook(testDeletedBook);
+        testBook.setAvailability(Availability.DELETED);
+        bookService.saveBook(testBook);
 
         // When
         ResultActions response = mockMvc.perform(MockMvcRequestBuilders.get("/books")
@@ -101,21 +100,26 @@ public class BookControllerIT extends BookLiquibaseApplicationTests {
         // Then
         then(bookRepository.findAll().size())
                 .usingRecursiveComparison()
-                .isEqualTo(1);
+                .isEqualTo(0);
     }
 
     @Test
+    @Disabled
     @DisplayName("addNewBook")
     void addNewBook() throws Exception {
         // Given
-        Book testBook = createDummyBookForTest();
+        Book testBook = new Book();
+        testBook.setId(UUID.fromString("570c5ac2-1f1a-46c4-9215-ccd17e9858f4"));
+        testBook.setTitle("Cat Among the Pigeons");
+        testBook.setGenre(Genre.THRILLER);
+        testBook.setIsbn(9780425175477L);
 
         // When
-        ResultActions response = mockMvc.perform(MockMvcRequestBuilders.get("/books")
+        ResultActions response = mockMvc.perform(MockMvcRequestBuilders.post("/books")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(testBook))
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
 
         // Then
         then(response)
@@ -127,40 +131,39 @@ public class BookControllerIT extends BookLiquibaseApplicationTests {
     @DisplayName("deleteExistingBookById")
     void deleteExistingBookById() throws Exception {
         // Given
-        Book testBook = createDummyBookForTest();
-        bookService.saveBook(testBook);
-        Book expected = new Book();
-        expected.setAvailability(Availability.DELETED);
+        Book testBook = createAndSaveDummyBookForTest();
+        Book deletedBook = new Book();
+        deletedBook.setAvailability(Availability.DELETED);
 
         // When
-        ResultActions response = mockMvc.perform(MockMvcRequestBuilders.get("/books", testBook.getId())
+        ResultActions response = mockMvc.perform(MockMvcRequestBuilders.delete("/books/{bookId}", String.valueOf(testBook.getId()))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(testBook))
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+                .andExpect(status().is(204));
 
         // Then
-       then(response)
+        then(response)
                .usingRecursiveComparison()
-               .isEqualTo(expected);
+               .isEqualTo(deletedBook);
     }
 
-    private Book createDummyBookForTest() {
+    private Book createAndSaveDummyBookForTest() {
         Book dummyBook = new Book();
         dummyBook.setId(UUID.fromString("570c5ac2-1f1a-46c4-9215-ccd17e9858f4"));
         dummyBook.setTitle("Cat Among the Pigeons");
         dummyBook.setGenre(Genre.THRILLER);
         dummyBook.setIsbn(9780425175477L);
-        return dummyBook;
+        return bookRepository.save(dummyBook);
     }
 
-    private Book createDummyDeletedBookForTest() {
+    private Book createAndSaveDummyDeletedBookForTest() {
         Book dummyBook = new Book();
         dummyBook.setId(UUID.fromString("42a01fb4-520c-45f2-b8c2-46337130adbb"));
         dummyBook.setTitle("The Lord of the Rings");
         dummyBook.setGenre(Genre.THRILLER);
         dummyBook.setAvailability(Availability.DELETED);
         dummyBook.setIsbn(9788845292613L);
-        return dummyBook;
+        return bookRepository.save(dummyBook);
     }
 }

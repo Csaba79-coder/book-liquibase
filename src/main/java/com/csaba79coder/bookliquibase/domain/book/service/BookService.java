@@ -29,7 +29,7 @@ public class BookService {
 
     public Book saveBook(Book book) {
         if (!ISBN13Validator.validISBN(book.getIsbn())) {
-            String message = format("Book id: %s. Invalid ISBN number: %s", book.getId(), book.getIsbn());
+            String message = format("Book id: %s. Invalid ISBN number: %s", String.valueOf(book.getId()), String.valueOf(book.getIsbn()));
             log.info(message);
             throw  new InputMismatchException(message);
         } else {
@@ -42,7 +42,7 @@ public class BookService {
     public void deleteBookById(UUID id) {
         Book book = bookRepository.findBookById(id)
                         .orElseThrow(() -> {
-                            String message = format("Book with id: %s was not found", id);
+                            String message = format("Book with id: %s was not found", String.valueOf(id));
                             log.info(message);
                             return new NoSuchElementException(message);
                         });

@@ -3,12 +3,11 @@ package com.csaba79coder.bookliquibase.domain.util;
 public class ISBN13Validator {
 
     public static boolean validISBN(Long isbnLong) {
-        if (isbnLong < 0) {
-            return false;
-        }
-
         String isbn = String.valueOf(isbnLong);
         if (isbn == null) {
+            return false;
+        }
+        if (isbn.startsWith("-")) {
             return false;
         }
         isbn = isbn.replaceAll( "-", "" );
