@@ -18,6 +18,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.util.Arrays;
+import java.util.Objects;
 import java.util.UUID;
 
 import static org.assertj.core.api.BDDAssertions.then;
@@ -149,6 +151,26 @@ public class BookControllerIT extends BookLiquibaseApplicationTests {
         then(bookRepository.findAll().size())
                 .usingRecursiveComparison()
                 .isEqualTo(0);
+    }
+
+    @Test
+    @DisplayName("deleteNonExistingIdExpectingErrorCode")
+    void deleteNonExistingIdExpectingErrorCode() throws Exception {
+        // Given
+        UUID nonExistingId = UUID.fromString("4bc34bbf-6278-4586-9e62-429bc41edcf5");
+
+        // When
+        ResultActions response = mockMvc.perform(MockMvcRequestBuilders.delete("/books/{bookId}", nonExistingId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+
+        var body = response.andReturn().getResponse().getContentAsString();
+
+        // Then
+        then(body)
+                // .usingRecursiveComparison()
+                .isEqualTo("{ERROR_CODE_001=Book with id: %s was not found}");
     }
 
     private Book createAndSaveDummyBookForTest() {

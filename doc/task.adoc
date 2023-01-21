@@ -36,3 +36,7 @@ then(response)
     .ignoringExpectedNullFields()
     .ignoringFields("id")
     .isEqualTo(testBook);
+
+https://www.javatpoint.com/java-string-format
+
+https://github.com/assertj/assertj
