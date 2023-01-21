@@ -48,6 +48,6 @@ public class Book {
     private Availability availability = Availability.AVAILABLE;
 
     public void delete(Book book) {
-        book.availability = Availability.DELETED;
+        book.setAvailability(Availability.DELETED);
     }
 }

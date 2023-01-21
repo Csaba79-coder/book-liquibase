@@ -123,6 +123,28 @@ public class BookControllerIT extends BookLiquibaseApplicationTests {
                 .isEqualTo(testBook);
     }
 
+    @Test
+    @DisplayName("deleteExistingBookById")
+    void deleteExistingBookById() throws Exception {
+        // Given
+        Book testBook = createDummyBookForTest();
+        bookService.saveBook(testBook);
+        Book expected = new Book();
+        expected.setAvailability(Availability.DELETED);
+
+        // When
+        ResultActions response = mockMvc.perform(MockMvcRequestBuilders.get("/books", testBook.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(testBook))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        // Then
+       then(response)
+               .usingRecursiveComparison()
+               .isEqualTo(expected);
+    }
+
     private Book createDummyBookForTest() {
         Book dummyBook = new Book();
         dummyBook.setId(UUID.fromString("570c5ac2-1f1a-46c4-9215-ccd17e9858f4"));

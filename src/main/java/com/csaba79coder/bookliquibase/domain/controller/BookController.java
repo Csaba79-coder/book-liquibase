@@ -40,8 +40,8 @@ public class BookController {
             value = "/books/{bookId}",
             method = RequestMethod.DELETE,
             headers = "Accept=application/json")
-    public ResponseEntity<Object> deleteBook(UUID id, @PathVariable UUID bookId) {
-        bookService.deleteBookById(id);
+    public ResponseEntity<Object> deleteBook(@PathVariable UUID bookId) {
+        bookService.deleteBookById(bookId);
         return ResponseEntity.status(204).build();
     }
 }

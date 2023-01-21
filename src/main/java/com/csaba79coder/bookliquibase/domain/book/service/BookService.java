@@ -2,7 +2,9 @@ package com.csaba79coder.bookliquibase.domain.book.service;
 
 import com.csaba79coder.bookliquibase.domain.book.entity.Book;
 import com.csaba79coder.bookliquibase.domain.book.persistence.BookRepository;
+import com.csaba79coder.bookliquibase.domain.book.value.Availability;
 import com.csaba79coder.bookliquibase.domain.util.ISBN13Validator;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -36,6 +38,7 @@ public class BookService {
 
     }
 
+    @Transactional
     public void deleteBookById(UUID id) {
         Book book = bookRepository.findBookById(id)
                         .orElseThrow(() -> {
@@ -43,6 +46,6 @@ public class BookService {
                             log.info(message);
                             return new NoSuchElementException(message);
                         });
-        book.delete(book);
+        bookRepository.delete(book);
     }
 }
