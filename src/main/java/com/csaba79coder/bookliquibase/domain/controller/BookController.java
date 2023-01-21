@@ -37,11 +37,11 @@ public class BookController {
     }
 
     @RequestMapping(
-            value = "/books/{bookId}",
+            value = "/books/{id}",
             method = RequestMethod.DELETE,
             headers = "Accept=application/json")
-    public ResponseEntity<Object> deleteBook(@PathVariable UUID bookId) {
-        bookService.deleteBookById(bookId);
+    public ResponseEntity<Object> deleteBook(@PathVariable UUID id) {
+        bookService.deleteBookById(id);
         return ResponseEntity.status(204).build();
     }
 }
