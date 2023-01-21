@@ -6,13 +6,17 @@ import com.csaba79coder.bookliquibase.domain.book.service.BookService;
 import com.csaba79coder.bookliquibase.domain.book.value.Genre;
 import com.csaba79coder.bookliquibase.domain.controller.BookController;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.micrometer.observation.Observation;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -20,11 +24,11 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.UUID;
 
+import static org.assertj.core.api.BDDAssertions.then;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(BookController.class)
 @AutoConfigureMockMvc(addFilters = false)
-public class BookControllerIT {
+public class BookControllerIT extends BookLiquibaseApplicationTests {
 
     // https://howtodoinjava.com/spring-boot2/testing/spring-boot-mockmvc-example/
     // https://spring.io/guides/gs/testing-web/
@@ -37,14 +41,15 @@ public class BookControllerIT {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @MockBean
+    @Autowired
     private BookService bookService;
 
-    @MockBean
+    @Autowired
     private BookRepository bookRepository;
 
     @BeforeEach
     void init() {
+
         bookRepository.deleteAll();
     }
 
@@ -52,11 +57,17 @@ public class BookControllerIT {
     @DisplayName("testRenderAllBooksWithEmptyResult")
     void testRenderAllBooksWithEmptyResult() throws Exception {
         // Given
-        System.out.println(bookRepository.findAll().size());
         
         // When
+        ResultActions response = mockMvc.perform(MockMvcRequestBuilders.get("/books")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
         
         // Then
+        Observation.CheckedCallable<?, Throwable> throwableCheckedCallable = () -> then(bookRepository.findAll().size())
+                .usingRecursiveComparison()
+                .isEqualTo(0);
     }
 
     @Test
@@ -64,6 +75,7 @@ public class BookControllerIT {
     void testRenderAllBooksWithNonEmptyResult() throws Exception {
         // Given
         Book testBook = createDummyBookForTest();
+        bookRepository.save(testBook);
 
         // When
         ResultActions response = mockMvc.perform(MockMvcRequestBuilders.get("/books")
@@ -73,7 +85,9 @@ public class BookControllerIT {
                 .andExpect(status().isOk());
 
         // Then
-        System.out.println(response.getClass().getName());
+        Observation.CheckedCallable<?, Throwable> throwableCheckedCallable = () -> then(bookRepository.findAll().size())
+                .usingRecursiveComparison()
+                .isEqualTo(1);
     }
 
     private Book createDummyBookForTest() {
