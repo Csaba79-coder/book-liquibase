@@ -9,5 +9,4 @@ class BookLiquibaseApplicationTests {
     @Test
     void contextLoads() {
     }
-
 }
