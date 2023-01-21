@@ -27,7 +27,7 @@ public class Book {
     @Id
     @GeneratedValue
     @Column(name = "id", nullable = false)
-    private UUID id;
+    private UUID id = UUID.randomUUID();
 
     @Column(name = "title", nullable = false)
     private String title;
