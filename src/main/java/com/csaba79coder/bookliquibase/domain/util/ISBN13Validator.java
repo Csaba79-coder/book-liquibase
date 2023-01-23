@@ -30,4 +30,8 @@ public class ISBN13Validator {
             return false;
         }
     }
+
+    private ISBN13Validator() {
+
+    }
 }
